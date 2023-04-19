@@ -71,3 +71,7 @@ oVAR_CONNECTOR.transactionCommit();
 //Post session
 oVAR_CONNECTOR.disconnect();
 ```
+Line Break
+```pascal
+"^0D^0A"
+```
