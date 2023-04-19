@@ -44,14 +44,17 @@ object oVAR_CONNECTOR;
 string[512] sVAR_TMP_SQL;
 string[256] sVAR_CTRL_NUM;
 integer iVAR_CTRL_NUM;
+
 sVAR_TMP_SQL = "";
 sVAR_CTRL_NUM = "";
 iVAR_CTRL_NUM = 0;
+
 oVAR_CONNECTOR = new("com.stercomm.emea.mstrombrink.dbpoolconnector.Connector");
 oVAR_CONNECTOR.debugInfoMapName("YOUR_MAP_NAME");
 oVAR_CONNECTOR.doDebug();
 oVAR_CONNECTOR.connect("DSV_PARTNER_EDI_CONF");
 oVAR_CONNECTOR.transactionStart();
+
 sVAR_TMP_SQL = "SELECT CONTROL_NUMBER_VALUE FROM DSV_ControlNumber_tb WHERE CONTROL_NUMBER_NAME= 'DSV_XXXXX_RECADV_ctl' FOR UPDATE WITH RR";
 iVAR_CTRL_NUM = oVAR_CONNECTOR.getResultAsIntegerExistingConn(sVAR_TMP_SQL, "CONTROL_NUMBER_VALUE");
 if iVAR_CTRL_NUM >= 2147483647 then
@@ -60,9 +63,11 @@ if iVAR_CTRL_NUM >= 2147483647 then
 iVAR_CTRL_NUM = iVAR_CTRL_NUM + 1;
 ntoa(iVAR_CTRL_NUM, sVAR_CTRL_NUM);
 sVAR_TMP_SQL = "UPDATE DSV_ControlNumber_tb SET CONTROL_NUMBER_VALUE = " + sVAR_CTRL_NUM + " WHERE CONTROL_NUMBER_NAME= 'DSV_XXXX_RECADV_ctl'";
+
 oVAR_CONNECTOR.statementPrepare(sVAR_TMP_SQL);
 oVAR_CONNECTOR.statementExecuteUpdate();
 oVAR_CONNECTOR.transactionCommit();
+
 //Post session
 oVAR_CONNECTOR.disconnect();
 ```
